@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import CardTransition from './CardTransition'
 
 export default function ForgotPassword() {
   const [submitted, setSubmitted] = useState(false)
@@ -25,7 +26,8 @@ export default function ForgotPassword() {
 
         {/* Right – card */}
         <div className="flex justify-center self-center z-10">
-          <div className="p-12 bg-white mx-auto rounded-3xl w-96">
+          <CardTransition>
+            <div className="p-12 bg-white mx-auto rounded-3xl w-96">
 
             {!submitted ? (
               <>
@@ -124,6 +126,7 @@ export default function ForgotPassword() {
               </span>
             </div>
           </div>
+          </CardTransition>
         </div>
       </div>
 

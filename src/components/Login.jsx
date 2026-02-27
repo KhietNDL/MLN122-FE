@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../services/api'
+import CardTransition from './CardTransition'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -52,7 +53,8 @@ export default function Login() {
 
         {/* Right – login card */}
         <div className="flex justify-center self-center z-10">
-          <div className="p-12 bg-white mx-auto rounded-3xl w-96">
+          <CardTransition>
+            <div className="p-12 bg-white mx-auto rounded-3xl w-96">
             <div className="mb-7">
               <h3 className="font-semibold text-2xl text-gray-800">Sign In</h3>
               <p className="text-gray-400">
@@ -205,10 +207,9 @@ export default function Login() {
               </span>
             </div>
           </div>
+          </CardTransition>
         </div>
       </div>
-
-      {/* Wave SVG */}
       <svg
         className="absolute bottom-0 left-0"
         xmlns="http://www.w3.org/2000/svg"

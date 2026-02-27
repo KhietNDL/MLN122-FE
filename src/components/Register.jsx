@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import CardTransition from './CardTransition'
 
 function EyeOpenIcon({ onClick, visible }) {
   return (
@@ -60,7 +61,8 @@ export default function Register() {
 
         {/* Right – register card */}
         <div className="flex justify-center self-center z-10">
-          <div className="p-12 bg-white mx-auto rounded-3xl w-96">
+          <CardTransition>
+            <div className="p-12 bg-white mx-auto rounded-3xl w-96">
             <div className="mb-7">
               <h3 className="font-semibold text-2xl text-gray-800">Sign Up</h3>
               <p className="text-gray-400">
@@ -197,6 +199,7 @@ export default function Register() {
               </span>
             </div>
           </div>
+          </CardTransition>
         </div>
       </div>
 
