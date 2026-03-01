@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { authApi } from '../services/api'
 import CardTransition from './CardTransition'
 
 function EyeOpenIcon({ onClick, visible }) {
@@ -37,8 +38,51 @@ function EyeSlashIcon({ onClick, visible }) {
 }
 
 export default function Register() {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
+
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [terms, setTerms] = useState(false)
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError('')
+
+    if (!terms) {
+      setError('Bạn cần đồng ý với Điều khoản dịch vụ để tiếp tục.')
+      return
+    }
+    if (password !== confirmPassword) {
+      setError('Mật khẩu xác nhận không khớp.')
+      return
+    }
+    if (password.length < 6) {
+      setError('Mật khẩu phải có ít nhất 6 ký tự.')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const { data } = await authApi.register(username, email, password)
+      if (data?.token) localStorage.setItem('token', data.token)
+      navigate('/dashboard')
+    } catch (err) {
+      const message =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        'Đăng ký thất bại. Vui lòng thử lại.'
+      setError(Array.isArray(message) ? message.join(', ') : message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <>
@@ -51,10 +95,9 @@ export default function Register() {
         {/* Left – promo text */}
         <div className="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10">
           <div className="self-start hidden lg:flex flex-col text-gray-300">
-            <h1 className="my-3 font-semibold text-4xl">Join us today</h1>
+            <h1 className="my-3 font-semibold text-4xl">Bắt đầu ngay hôm nay</h1>
             <p className="pr-3 text-sm opacity-75">
-              Create your account and start exploring everything we have to offer.
-              It only takes a minute to get started.
+              Tạo tài khoản để tính toán và hiểu rõ bạn đang giữ lại bao nhiêu giá trị từ công việc của mình.
             </p>
           </div>
         </div>
@@ -64,22 +107,35 @@ export default function Register() {
           <CardTransition>
             <div className="p-12 bg-white mx-auto rounded-3xl w-96">
             <div className="mb-7">
-              <h3 className="font-semibold text-2xl text-gray-800">Sign Up</h3>
+              <h3 className="font-semibold text-2xl text-gray-800">Đăng ký</h3>
               <p className="text-gray-400">
-                Already have an account?{' '}
+                Đã có tài khoản?{' '}
                 <Link to="/" className="text-sm text-purple-700 hover:text-purple-600">
-                  Sign In
+                  Đăng nhập
                 </Link>
               </p>
             </div>
 
-            <div className="space-y-6">
-              {/* Full name */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Error message */}
+              {error && (
+                <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-lg">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                  </svg>
+                  {error}
+                </div>
+              )}
+
+              {/* Username */}
               <div>
                 <input
                   className="w-full text-sm px-4 py-3 bg-gray-200 focus:bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-400"
                   type="text"
-                  placeholder="Full Name"
+                  placeholder="Tên người dùng"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
                 />
               </div>
 
@@ -88,16 +144,22 @@ export default function Register() {
                 <input
                   className="w-full text-sm px-4 py-3 bg-gray-200 focus:bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-400"
                   type="email"
-                  placeholder="Email"
+                  placeholder="Địa chỉ email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
 
               {/* Password */}
               <div className="relative">
                 <input
-                  placeholder="Password"
+                  placeholder="Mật khẩu"
                   type={showPassword ? 'text' : 'password'}
                   className="text-sm text-gray-800 px-4 py-3 rounded-lg w-full bg-gray-200 focus:bg-gray-100 border border-gray-200 focus:outline-none focus:border-purple-400"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
                 <div className="flex items-center absolute inset-y-0 right-0 mr-3 text-sm leading-5">
                   <EyeOpenIcon onClick={() => setShowPassword(!showPassword)} visible={!showPassword} />
@@ -108,9 +170,12 @@ export default function Register() {
               {/* Confirm Password */}
               <div className="relative">
                 <input
-                  placeholder="Confirm Password"
+                  placeholder="Xác nhận mật khẩu"
                   type={showConfirm ? 'text' : 'password'}
                   className="text-sm text-gray-800 px-4 py-3 rounded-lg w-full bg-gray-200 focus:bg-gray-100 border border-gray-200 focus:outline-none focus:border-purple-400"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
                 />
                 <div className="flex items-center absolute inset-y-0 right-0 mr-3 text-sm leading-5">
                   <EyeOpenIcon onClick={() => setShowConfirm(!showConfirm)} visible={!showConfirm} />
@@ -123,16 +188,18 @@ export default function Register() {
                 <input
                   id="terms"
                   type="checkbox"
+                  checked={terms}
+                  onChange={(e) => setTerms(e.target.checked)}
                   className="mt-1 accent-purple-700 cursor-pointer"
                 />
                 <label htmlFor="terms" className="text-xs text-gray-400 cursor-pointer">
-                  I agree to the{' '}
+                  Tôi đồng ý với{' '}
                   <a href="#" className="text-purple-700 hover:text-purple-600">
-                    Terms of Service
+                    Điều khoản dịch vụ
                   </a>{' '}
-                  and{' '}
+                  và{' '}
                   <a href="#" className="text-purple-700 hover:text-purple-600">
-                    Privacy Policy
+                    Chính sách bảo mật
                   </a>
                 </label>
               </div>
@@ -141,16 +208,23 @@ export default function Register() {
               <div>
                 <button
                   type="submit"
-                  className="w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500"
+                  disabled={loading}
+                  className="w-full flex justify-center items-center gap-2 bg-purple-800 hover:bg-purple-700 disabled:opacity-60 disabled:cursor-not-allowed text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500"
                 >
-                  Create Account
+                  {loading && (
+                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                    </svg>
+                  )}
+                  {loading ? 'Đang tạo tài khoản...' : 'Tạo tài khoản'}
                 </button>
               </div>
 
               {/* Divider */}
               <div className="flex items-center justify-center space-x-2 my-5">
                 <span className="h-px w-16 bg-gray-100" />
-                <span className="text-gray-300 font-normal">or</span>
+                <span className="text-gray-300 font-normal">hoặc</span>
                 <span className="h-px w-16 bg-gray-100" />
               </div>
 
@@ -182,21 +256,10 @@ export default function Register() {
                   <span>Facebook</span>
                 </button>
               </div>
-            </div>
+            </form>
 
-            {/* Footer note */}
-            <div className="mt-7 text-center text-gray-300 text-xs">
-              <span>
-                Copyright © 2021-2023{' '}
-                <a
-                  href="https://codepen.io/uidesignhub"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-purple-500 hover:text-purple-600"
-                >
-                  AJI
-                </a>
-              </span>
+            <div className="mt-7 text-center text-gray-400 text-xs">
+              Dữ liệu được tính toán hoàn toàn cục bộ. Không lưu thông tin cá nhân.
             </div>
           </div>
           </CardTransition>

@@ -16,10 +16,9 @@ export default function ForgotPassword() {
         {/* Left – info text */}
         <div className="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10">
           <div className="self-start hidden lg:flex flex-col text-gray-300">
-            <h1 className="my-3 font-semibold text-4xl">Forgot your password?</h1>
+            <h1 className="my-3 font-semibold text-4xl">Quên mật khẩu?</h1>
             <p className="pr-3 text-sm opacity-75">
-              No worries! Enter your email address and we&apos;ll send you a link
-              to reset your password in just a few moments.
+              Không sao! Nhập email của bạn và chúng tôi sẽ gửi liên kết đặt lại mật khẩu ngay.
             </p>
           </div>
         </div>
@@ -38,9 +37,9 @@ export default function ForgotPassword() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                   </div>
-                  <h3 className="font-semibold text-2xl text-gray-800">Reset Password</h3>
+                  <h3 className="font-semibold text-2xl text-gray-800">Đặt lại mật khẩu</h3>
                   <p className="text-gray-400 text-sm mt-1">
-                    Enter the email associated with your account and we&apos;ll send you a reset link.
+                    Nhập email gắn với tài khoản của bạn, chúng tôi sẽ gửi liên kết đặt lại cho bạn.
                   </p>
                 </div>
 
@@ -50,7 +49,7 @@ export default function ForgotPassword() {
                     <input
                       className="w-full text-sm px-4 py-3 bg-gray-200 focus:bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-400"
                       type="email"
-                      placeholder="Email address"
+                      placeholder="Địa chỉ email"
                     />
                   </div>
 
@@ -61,7 +60,7 @@ export default function ForgotPassword() {
                       onClick={() => setSubmitted(true)}
                       className="w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500"
                     >
-                      Send Reset Link
+                      Gửi liên kết đặt lại
                     </button>
                   </div>
 
@@ -74,7 +73,7 @@ export default function ForgotPassword() {
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                       </svg>
-                      Back to Sign In
+                      Quảy lại đăng nhập
                     </Link>
                   </div>
                 </div>
@@ -87,17 +86,17 @@ export default function ForgotPassword() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <h3 className="font-semibold text-2xl text-gray-800">Check your email</h3>
+                <h3 className="font-semibold text-2xl text-gray-800">Kiểm tra email của bạn</h3>
                 <p className="text-gray-400 text-sm">
-                  We&apos;ve sent a password reset link to your email address.
-                  Please check your inbox (and spam folder).
+                  Chúng tôi đã gửi liên kết đặt lại mật khẩu đến email của bạn.
+                  Vui lòng kiểm tra hộp thư đến (và thư rác).
                 </p>
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
                   className="w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500"
                 >
-                  Resend Email
+                  Gửi lại email
                 </button>
                 <Link
                   to="/"
@@ -106,24 +105,13 @@ export default function ForgotPassword() {
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                   </svg>
-                  Back to Sign In
+                  Quảy lại đăng nhập
                 </Link>
               </div>
             )}
 
-            {/* Footer note */}
-            <div className="mt-7 text-center text-gray-300 text-xs">
-              <span>
-                Copyright © 2021-2023{' '}
-                <a
-                  href="https://codepen.io/uidesignhub"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-purple-500 hover:text-purple-600"
-                >
-                  AJI
-                </a>
-              </span>
+            <div className="mt-7 text-center text-gray-400 text-xs">
+              Dữ liệu được tính toán hoàn toàn cục bộ. Không lưu thông tin cá nhân.
             </div>
           </div>
           </CardTransition>

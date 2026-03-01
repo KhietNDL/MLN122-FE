@@ -17,6 +17,12 @@ api.interceptors.request.use((config) => {
 export const authApi = {
   login: (email, password) =>
     api.post('/api/auth/login', { email, password }),
+
+  register: (username, email, password) =>
+    api.post('/api/auth/register', { username, email, password }),
+
+  getMe: () =>
+    api.get('/api/auth/me'),
 }
 
 export default api

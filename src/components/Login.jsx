@@ -43,10 +43,9 @@ export default function Login() {
         {/* Left – welcome text (large screens only) */}
         <div className="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10">
           <div className="self-start hidden lg:flex flex-col text-gray-300">
-            <h1 className="my-3 font-semibold text-4xl">Welcome back</h1>
+            <h1 className="my-3 font-semibold text-4xl">Chào mừng trở lại</h1>
             <p className="pr-3 text-sm opacity-75">
-              Lorem ipsum is placeholder text commonly used in the graphic, print,
-              and publishing industries for previewing layouts and visual mockups
+              Đăng nhập để xem bạn đang giữ lại bao nhiêu giá trị từ công việc của mình.
             </p>
           </div>
         </div>
@@ -56,11 +55,11 @@ export default function Login() {
           <CardTransition>
             <div className="p-12 bg-white mx-auto rounded-3xl w-96">
             <div className="mb-7">
-              <h3 className="font-semibold text-2xl text-gray-800">Sign In</h3>
+              <h3 className="font-semibold text-2xl text-gray-800">Đăng nhập</h3>
               <p className="text-gray-400">
-                Don&apos;t have an account?{' '}
+                Chưa có tài khoản?{' '}
                 <Link to="/register" className="text-sm text-purple-700 hover:text-purple-600">
-                  Sign Up
+                  Đăng ký ngay
                 </Link>
               </p>
             </div>
@@ -81,7 +80,7 @@ export default function Login() {
                 <input
                   className="w-full text-sm px-4 py-3 bg-gray-200 focus:bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-400"
                   type="email"
-                  placeholder="Email"
+                  placeholder="Địa chỉ email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -91,7 +90,7 @@ export default function Login() {
               {/* Password */}
               <div className="relative">
                 <input
-                  placeholder="Password"
+                  placeholder="Mật khẩu"
                   type={showPassword ? 'text' : 'password'}
                   className="text-sm text-gray-800 px-4 py-3 rounded-lg w-full bg-gray-200 focus:bg-gray-100 border border-gray-200 focus:outline-none focus:border-purple-400"
                   value={password}
@@ -133,7 +132,7 @@ export default function Login() {
               <div className="flex items-center justify-between">
                 <div className="text-sm ml-auto">
                   <Link to="/forgot-password" className="text-purple-700 hover:text-purple-600">
-                    Forgot your password?
+                    Quên mật khẩu?
                   </Link>
                 </div>
               </div>
@@ -151,14 +150,14 @@ export default function Login() {
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                     </svg>
                   )}
-                  {loading ? 'Đang đăng nhập...' : 'Sign in'}
+                  {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
                 </button>
               </div>
 
               {/* Divider */}
               <div className="flex items-center justify-center space-x-2 my-5">
                 <span className="h-px w-16 bg-gray-100" />
-                <span className="text-gray-300 font-normal">or</span>
+                <span className="text-gray-300 font-normal">hoặc</span>
                 <span className="h-px w-16 bg-gray-100" />
               </div>
 
@@ -192,19 +191,8 @@ export default function Login() {
               </div>
             </form>
 
-            {/* Footer note */}
-            <div className="mt-7 text-center text-gray-300 text-xs">
-              <span>
-                Copyright © 2021-2023{' '}
-                <a
-                  href="https://codepen.io/uidesignhub"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-purple-500 hover:text-purple-600"
-                >
-                  AJI
-                </a>
-              </span>
+            <div className="mt-7 text-center text-gray-400 text-xs">
+              Dữ liệu được tính toán hoàn toàn cục bộ. Không lưu thông tin cá nhân.
             </div>
           </div>
           </CardTransition>
