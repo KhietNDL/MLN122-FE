@@ -11,6 +11,14 @@ const officeFields = [
     hint: "Số tiền thực tế vào tài khoản mỗi tháng",
     unit: "VNĐ",
     icon: "💰",
+    tooltip: {
+      formula: "Lương gross − Thuế TNCN − BHXH cá nhân",
+      examples: [
+        { label: "Lương gross 15tr", value: "≈ 12,800,000đ/tháng" },
+        { label: "Lương gross 20tr", value: "≈ 16,500,000đ/tháng" },
+        { label: "Lương gross 30tr", value: "≈ 23,500,000đ/tháng" },
+      ],
+    },
   },
   {
     key: "total_work_hours_monthly",
@@ -19,6 +27,14 @@ const officeFields = [
     hint: "Bao gồm cả OT nếu có",
     unit: "giờ",
     icon: "⏱️",
+    tooltip: {
+      formula: "Số ngày làm việc × Số giờ/ngày",
+      examples: [
+        { label: "22 ngày × 8h (tiêu chuẩn)", value: "176 giờ" },
+        { label: "22 ngày × 9h + 10h OT", value: "208 giờ" },
+        { label: "26 ngày × 8h (có thứ 7)", value: "208 giờ" },
+      ],
+    },
   },
   {
     key: "total_value_created_monthly",
@@ -27,6 +43,14 @@ const officeFields = [
     hint: "Doanh thu bạn mang về, chi phí tiết kiệm, hoặc giá trị sản phẩm đóng góp",
     unit: "VNĐ",
     icon: "📈",
+    tooltip: {
+      formula: "Doanh thu mang về / Chi phí tiết kiệm / Giá trị sản phẩm",
+      examples: [
+        { label: "Sales: doanh thu chốt được", value: "Doanh số tháng" },
+        { label: "Dev: lương thị trường freelance", value: "Rate × giờ làm" },
+        { label: "Không chắc → dùng lương × 3", value: "Quy tắc thông thường" },
+      ],
+    },
   },
   {
     key: "living_cost_monthly",
@@ -35,6 +59,14 @@ const officeFields = [
     hint: "Tổng chi phí tối thiểu để đảm bảo cuộc sống",
     unit: "VNĐ",
     icon: "🏠",
+    tooltip: {
+      formula: "Nhà + Ăn uống + Đi lại + Tiện ích + Dự phòng",
+      examples: [
+        { label: "Sống cùng gia đình HCM", value: "≈ 4,000,000đ" },
+        { label: "Thuê phòng HCM (1 mình)", value: "≈ 7,000,000đ" },
+        { label: "Thuê căn hộ + xe máy", value: "≈ 12,000,000đ" },
+      ],
+    },
   },
 ];
 
@@ -47,6 +79,14 @@ const driverFields = [
     hint: "Tổng tiền khách hàng trả trước khi nền tảng trừ",
     unit: "VNĐ",
     icon: "💵",
+    tooltip: {
+      formula: "Tổng các chuyến trong ngày (chưa trừ chiết khấu)",
+      examples: [
+        { label: "10 chuyến × 60,000đ", value: "600,000đ/ngày" },
+        { label: "8 chuyến × 75,000đ",  value: "600,000đ/ngày" },
+        { label: "Xem trong app lịch sử chuyến", value: "Chính xác nhất" },
+      ],
+    },
   },
   {
     key: "commission_rate",
@@ -55,6 +95,14 @@ const driverFields = [
     hint: "Tỷ lệ nền tảng (Grab, Gojek…) trừ vào doanh thu",
     unit: "%",
     icon: "✂️",
+    tooltip: {
+      formula: "Tỷ lệ nền tảng giữ lại trên tổng doanh thu",
+      examples: [
+        { label: "Grab (xe máy)",  value: "≈ 27.272%" },
+        { label: "Grab (ô tô)",    value: "≈ 28.636%" },
+        { label: "Gojek / Be",     value: "≈ 20–25%" },
+      ],
+    },
   },
   {
     key: "fuel_cost_daily",
@@ -63,6 +111,14 @@ const driverFields = [
     hint: "Chi phí nhiên liệu mỗi ngày",
     unit: "VNĐ",
     icon: "⛽",
+    tooltip: {
+      formula: "Km chạy/ngày ÷ Mức tiêu hao × Giá xăng/lít",
+      examples: [
+        { label: "100km, 50km/L, 23k/L",  value: "≈ 46,000đ/ngày" },
+        { label: "150km, 45km/L, 23k/L",  value: "≈ 77,000đ/ngày" },
+        { label: "Ô tô 200km, 12L/100km", value: "≈ 552,000đ/ngày" },
+      ],
+    },
   },
   {
     key: "depreciation_daily",
@@ -71,6 +127,14 @@ const driverFields = [
     hint: "Khấu hao + bảo dưỡng ước tính chia theo ngày",
     unit: "VNĐ",
     icon: "🔧",
+    tooltip: {
+      formula: "(Giá mua − Giá trị còn lại) ÷ (Số năm × 365)",
+      examples: [
+        { label: "Xe máy 30tr, dùng 4 năm", value: "≈ 20,500đ/ngày" },
+        { label: "Xe máy 50tr, dùng 5 năm", value: "≈ 27,400đ/ngày" },
+        { label: "Ô tô 400tr, dùng 8 năm",  value: "≈ 137,000đ/ngày" },
+      ],
+    },
   },
   {
     key: "living_cost_daily",
@@ -79,6 +143,14 @@ const driverFields = [
     hint: "Chi phí sinh hoạt tối thiểu mỗi ngày",
     unit: "VNĐ",
     icon: "🏠",
+    tooltip: {
+      formula: "Chi phí sinh hoạt tháng ÷ 30",
+      examples: [
+        { label: "5,000,000đ/tháng", value: "≈ 167,000đ/ngày" },
+        { label: "7,000,000đ/tháng", value: "≈ 233,000đ/ngày" },
+        { label: "10,000,000đ/tháng", value: "≈ 333,000đ/ngày" },
+      ],
+    },
   },
   {
     key: "total_work_hours_daily",
@@ -87,6 +159,14 @@ const driverFields = [
     hint: "Số giờ thực tế bạn chạy xe mỗi ngày",
     unit: "giờ",
     icon: "⏱️",
+    tooltip: {
+      formula: "Thời gian online trên app (bao gồm chờ khách)",
+      examples: [
+        { label: "Ca sáng 6h–12h", value: "6 giờ" },
+        { label: "Cả ngày 7h–17h", value: "10 giờ" },
+        { label: "Tăng ca thêm tối", value: "12–14 giờ" },
+      ],
+    },
   },
 ];
 
@@ -138,7 +218,7 @@ function calculate(role, raw) {
 // ─── Input Field Component ────────────────────────────────────────────────────
 function InputField({ field, value, error, onChange }) {
   const [focused, setFocused] = useState(false);
-  const { key, label, placeholder, hint, unit, icon } = field;
+  const { key, label, placeholder, hint, unit, icon, tooltip } = field;
   const hasValue = value !== "" && value !== undefined;
 
   return (
@@ -156,6 +236,23 @@ function InputField({ field, value, error, onChange }) {
         <span className="text-purple-400 font-normal">
           ({unit})
         </span>
+        {tooltip && (
+          <span className="group/tip relative ml-auto">
+            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-purple-100 text-purple-500 text-[10px] font-bold cursor-help select-none">?</span>
+            <div className="pointer-events-none absolute right-0 top-5 z-50 w-64 opacity-0 group-hover/tip:opacity-100 transition-opacity duration-200
+              bg-white border border-purple-100 rounded-xl shadow-xl p-3 text-left">
+              <p className="text-[10px] font-semibold text-purple-500 uppercase tracking-wide mb-1">Công thức tính</p>
+              <p className="text-xs text-gray-600 font-mono bg-purple-50 rounded-lg px-2 py-1.5 mb-2">{tooltip.formula}</p>
+              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">Ví dụ tham khảo</p>
+              {tooltip.examples.map((ex, i) => (
+                <div key={i} className="flex justify-between items-center text-xs py-0.5">
+                  <span className="text-gray-500">{ex.label}</span>
+                  <span className="font-semibold text-purple-600 ml-2 whitespace-nowrap">{ex.value}</span>
+                </div>
+              ))}
+            </div>
+          </span>
+        )}
       </label>
 
       <div
