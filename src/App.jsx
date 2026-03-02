@@ -7,6 +7,7 @@ import PrivateRoute from './components/PrivateRoute'
 import RoleSelection from './pages/RoleSelection'
 import CalculatorForm from './pages/CalculatorForm'
 import Result from './pages/Result'
+import History from './pages/History'
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -22,6 +23,7 @@ function AnimatedRoutes() {
         <Route path="/dashboard" element={<PrivateRoute><RoleSelection /></PrivateRoute>} />
         <Route path="/calculator/:role" element={<PrivateRoute><CalculatorForm /></PrivateRoute>} />
         <Route path="/result" element={<PrivateRoute><Result /></PrivateRoute>} />
+        <Route path="/history" element={<PrivateRoute><History /></PrivateRoute>} />
       </Routes>
     </AnimatePresence>
   )

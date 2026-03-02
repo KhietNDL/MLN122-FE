@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LogOut, Briefcase, Truck, Sparkles, ChevronRight } from "lucide-react";
+import { LogOut, Briefcase, Truck, Sparkles, ChevronRight, History } from "lucide-react";
 
 const roles = [
   {
@@ -30,6 +30,16 @@ const roles = [
 export default function RoleSelection() {
   const [selected, setSelected] = useState(null);
   const navigate = useNavigate();
+
+  // Decode username from JWT without extra API call
+  const username = (() => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return null;
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.username || null;
+    } catch { return null; }
+  })();
 
   return (
     <div className="h-screen w-full bg-[#0d0d14] text-white relative overflow-hidden flex flex-col">
@@ -65,12 +75,20 @@ export default function RoleSelection() {
             <span className="text-xs text-white/50">Bạn đang giữ lại bao nhiêu?</span>
           </div>
         </div>
-        <button
-          onClick={() => { localStorage.removeItem('token'); navigate('/'); }}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200 border border-transparent hover:border-white/10">
-          <LogOut className="w-4 h-4" />
-          <span>Đăng xuất</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate('/history')}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200 border border-transparent hover:border-white/10">
+            <History className="w-4 h-4" />
+            <span className="hidden sm:inline">Lịch sử</span>
+          </button>
+          <button
+            onClick={() => { localStorage.removeItem('token'); navigate('/'); }}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5 transition-all duration-200 border border-transparent hover:border-white/10">
+            <LogOut className="w-4 h-4" />
+            <span className="hidden sm:inline">Đăng xuất</span>
+          </button>
+        </div>
       </nav>
 
       {/* Main content */}
@@ -83,6 +101,11 @@ export default function RoleSelection() {
 
         {/* Heading */}
         <div className="text-center max-w-3xl mb-6">
+          {username && (
+            <p className="text-white/80 text-xl mb-3">
+              Xin chào, <span className="text-violet-300 font-semibold">{username}</span> 👋
+            </p>
+          )}
           <h1 className="text-white mb-3" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 800, lineHeight: 1.15, letterSpacing: "-0.02em" }}>
             Bạn đang giữ lại bao nhiêu
             <br />

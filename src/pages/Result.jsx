@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { calculationApi } from '../services/api'
 
 // ─── Formatters ────────────────────────────────────────────────────────────
 const fmt = (n) => new Intl.NumberFormat('vi-VN').format(Math.round(n))
@@ -189,6 +190,17 @@ export default function Result() {
   const time_for_self = (C / L) * H
   const time_for_system = H - time_for_self
   const min_retention = C / W
+
+  // Fire-and-forget: save to history, don't block UI
+  // useRef guard prevents double-save from React StrictMode double-mount
+  const saved = useRef(false)
+  useEffect(() => {
+    if (saved.current) return
+    saved.current = true
+    calculationApi.save(role, normalized, state.raw).catch(() => {
+      // Silently ignore — user still sees results
+    })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const fadeUp = {
     hidden: { opacity: 0, y: 20 },

@@ -25,4 +25,18 @@ export const authApi = {
     api.get('/api/auth/me'),
 }
 
+export const calculationApi = {
+  save: (role, normalized, raw) =>
+    api.post('/api/calculations', { role, normalized, raw }),
+
+  getAll: (limit = 20, offset = 0) =>
+    api.get('/api/calculations', { params: { limit, offset } }),
+
+  getOne: (id) =>
+    api.get(`/api/calculations/${id}`),
+
+  remove: (id) =>
+    api.delete(`/api/calculations/${id}`),
+}
+
 export default api
