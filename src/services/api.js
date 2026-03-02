@@ -23,6 +23,15 @@ export const authApi = {
 
   getMe: () =>
     api.get('/api/auth/me'),
+
+  forgotPassword: (email) =>
+    api.post('/api/auth/forgot-password', { email }),
+
+  verifyOtp: (email, code) =>
+    api.post('/api/auth/verify-otp', { email, code }),
+
+  resetPassword: (email, code, new_password) =>
+    api.post('/api/auth/reset-password', { email, code, new_password }),
 }
 
 export const calculationApi = {

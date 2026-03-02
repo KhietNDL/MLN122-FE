@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { Sparkles, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react'
 import { authApi } from '../services/api'
-import CardTransition from './CardTransition'
 
-export default function Login() {
+export default function App() {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
@@ -17,15 +17,13 @@ export default function Login() {
     setLoading(true)
     try {
       const { data } = await authApi.login(email, password)
-      // Lưu token nếu backend trả về
       if (data?.token) localStorage.setItem('token', data.token)
-      if (data?.access_token) localStorage.setItem('token', data.access_token)
       navigate('/dashboard')
     } catch (err) {
       const message =
         err?.response?.data?.message ||
         err?.response?.data?.error ||
-        'Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.'
+        'Email hoặc mật khẩu không đúng.'
       setError(Array.isArray(message) ? message.join(', ') : message)
     } finally {
       setLoading(false)
@@ -33,142 +31,187 @@ export default function Login() {
   }
 
   return (
-    <>
-      {/* Background */}
-      <div className="bg-purple-900 absolute top-0 left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-purple-800 bottom-0 leading-5 h-full w-full overflow-hidden" />
+    <div className="h-screen w-full bg-[#0d0d14] text-white relative overflow-hidden flex flex-col">
+      {/* ── Background gradients ── */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-purple-700/40 rounded-full blur-[140px]" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-violet-600/30 rounded-full blur-[80px]" />
+        <div className="absolute top-0 right-0 w-[400px] h-[300px] bg-indigo-900/20 rounded-full blur-[100px]" />
+        {/* Grid overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+          }}
+        />
+      </div>
 
-      {/* Main container */}
-      <div className="relative min-h-screen sm:flex sm:flex-row justify-center bg-transparent rounded-3xl shadow-xl">
+      {/* ── Navbar ── */}
+      <nav className="relative z-10 flex items-center justify-between px-8 py-5 border-b border-white/5 backdrop-blur-sm">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center shadow-lg shadow-violet-500/30">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-white font-semibold tracking-tight">
+              Value<span className="text-violet-400">Check</span>
+            </span>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 ml-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
+            <div className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+            <span className="text-xs text-white/50">Bạn đang giữ lại bao nhiêu?</span>
+          </div>
+        </div>
+      </nav>
 
-        {/* Left – welcome text (large screens only) */}
-        <div className="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md z-10">
-          <div className="self-start hidden lg:flex flex-col text-gray-300">
-            <h1 className="my-3 font-semibold text-4xl">Chào mừng trở lại</h1>
-            <p className="pr-3 text-sm opacity-75">
-              Đăng nhập để xem bạn đang giữ lại bao nhiêu giá trị từ công việc của mình.
+      {/* ── Main content ── */}
+      <main className="relative z-10 flex-1 flex flex-col lg:flex-row items-center justify-center gap-16 px-6 py-10">
+
+        {/* Left: welcome text (large screens only) */}
+        <div className="hidden lg:flex flex-col max-w-sm">
+          {/* Badge */}
+          <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm w-fit">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Khám phá giá trị thực của bạn</span>
+          </div>
+
+          <h1
+            className="text-white mb-4"
+            style={{
+              fontSize: 'clamp(2rem, 3.5vw, 3rem)',
+              fontWeight: 800,
+              lineHeight: 1.15,
+              letterSpacing: '-0.02em',
+            }}
+          >
+            Chào mừng<br />
+            <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
+              trở lại!
+            </span>
+          </h1>
+
+          <p className="text-white/50" style={{ fontSize: '1rem', lineHeight: 1.7 }}>
+            Đăng nhập để xem bạn đang giữ lại bao nhiêu giá trị từ công việc của mình.
+          </p>
+
+          {/* Decorative info card */}
+          <div className="mt-10 rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-purple-600/5 p-5 backdrop-blur-sm">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500/30 to-purple-600/20 border border-violet-500/20 flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-violet-300" />
+              </div>
+              <span className="text-white/80 text-sm font-semibold">Tính toán cục bộ</span>
+            </div>
+            <p className="text-white/40 text-xs leading-relaxed">
+              Dữ liệu của bạn được xử lý hoàn toàn trên thiết bị. Không lưu trữ thông tin cá nhân.
             </p>
           </div>
         </div>
 
-        {/* Right – login card */}
-        <div className="flex justify-center self-center z-10">
-          <CardTransition>
-            <div className="p-12 bg-white mx-auto rounded-3xl w-96">
+        {/* Right: login card */}
+        <div className="w-full max-w-md">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-8 shadow-2xl shadow-black/40">
+
+            {/* Header */}
             <div className="mb-7">
-              <h3 className="font-semibold text-2xl text-gray-800">Đăng nhập</h3>
-              <p className="text-gray-400">
+              <h2 className="text-white mb-1" style={{ fontSize: '1.5rem', fontWeight: 700 }}>
+                Đăng nhập
+              </h2>
+              <p className="text-white/40 text-sm">
                 Chưa có tài khoản?{' '}
-                <Link to="/register" className="text-sm text-purple-700 hover:text-purple-600">
+                <a href="/register" className="text-violet-400 hover:text-violet-300 transition-colors duration-200">
                   Đăng ký ngay
-                </Link>
+                </a>
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Error message */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Error */}
               {error && (
-                <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-lg">
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
-                  </svg>
-                  {error}
+                <div className="flex items-start gap-2.5 bg-red-500/10 border border-red-500/20 text-red-300 text-sm px-4 py-3 rounded-xl">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                  <span>{error}</span>
                 </div>
               )}
 
               {/* Email */}
               <div>
+                <label className="block text-white/60 text-xs mb-1.5 ml-0.5">Địa chỉ email</label>
                 <input
-                  className="w-full text-sm px-4 py-3 bg-gray-200 focus:bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-400"
                   type="email"
-                  placeholder="Địa chỉ email"
+                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/25 focus:outline-none focus:border-violet-500/60 focus:bg-white/[0.07] transition-all duration-200"
                 />
               </div>
 
               {/* Password */}
-              <div className="relative">
-                <input
-                  placeholder="Mật khẩu"
-                  type={showPassword ? 'text' : 'password'}
-                  className="text-sm text-gray-800 px-4 py-3 rounded-lg w-full bg-gray-200 focus:bg-gray-100 border border-gray-200 focus:outline-none focus:border-purple-400"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <div className="flex items-center absolute inset-y-0 right-0 mr-3 text-sm leading-5">
-                  {/* Eye-open icon (show when password is hidden) */}
-                  <svg
+              <div>
+                <label className="block text-white/60 text-xs mb-1.5 ml-0.5">Mật khẩu</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 pr-11 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/25 focus:outline-none focus:border-violet-500/60 focus:bg-white/[0.07] transition-all duration-200"
+                  />
+                  <button
+                    type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className={`h-4 text-purple-700 cursor-pointer ${showPassword ? 'hidden' : 'block'}`}
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 576 512"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-violet-400 transition-colors duration-200"
                   >
-                    <path
-                      fill="currentColor"
-                      d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"
-                    />
-                  </svg>
-
-                  {/* Eye-slash icon (show when password is visible) */}
-                  <svg
-                    onClick={() => setShowPassword(!showPassword)}
-                    className={`h-4 text-purple-700 cursor-pointer ${showPassword ? 'block' : 'hidden'}`}
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 640 512"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M320 400c-75.85 0-137.25-58.71-142.9-133.11L72.2 185.82c-13.79 17.3-26.48 35.59-36.72 55.59a32.35 32.35 0 0 0 0 29.19C89.71 376.41 197.07 448 320 448c26.91 0 52.87-4 77.89-10.46L346 397.39a144.13 144.13 0 0 1-26 2.61zm313.82 58.1l-110.55-85.44a331.25 331.25 0 0 0 81.25-102.07 32.35 32.35 0 0 0 0-29.19C550.29 135.59 442.93 64 320 64a308.15 308.15 0 0 0-147.32 37.7L45.46 3.37A16 16 0 0 0 23 6.18L3.37 31.45A16 16 0 0 0 6.18 53.9l588.36 454.73a16 16 0 0 0 22.46-2.81l19.64-25.27a16 16 0 0 0-2.82-22.45zm-183.72-142l-39.3-30.38A94.75 94.75 0 0 0 416 256a94.76 94.76 0 0 0-121.31-92.21A47.65 47.65 0 0 1 304 192a46.64 46.64 0 0 1-1.54 10l-73.61-56.89A142.31 142.31 0 0 1 320 112a143.92 143.92 0 0 1 144 144c0 21.63-5.29 41.79-13.9 60.11z"
-                    />
-                  </svg>
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
 
               {/* Forgot password */}
-              <div className="flex items-center justify-between">
-                <div className="text-sm ml-auto">
-                  <Link to="/forgot-password" className="text-purple-700 hover:text-purple-600">
-                    Quên mật khẩu?
-                  </Link>
-                </div>
+              <div className="flex justify-end">
+                <a
+                  href="/forgot-password"
+                  className="text-sm text-violet-400 hover:text-violet-300 transition-colors duration-200"
+                >
+                  Quên mật khẩu?
+                </a>
               </div>
 
-              {/* Sign in button */}
-              <div>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full flex justify-center items-center gap-2 bg-purple-800 hover:bg-purple-700 disabled:opacity-60 disabled:cursor-not-allowed text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500"
-                >
-                  {loading && (
-                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                    </svg>
-                  )}
-                  {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
-                </button>
-              </div>
+              {/* Submit button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold transition-all duration-200 shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 hover:scale-[1.02] active:scale-[0.99]"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Đang đăng nhập...</span>
+                  </>
+                ) : (
+                  'Đăng nhập'
+                )}
+              </button>
 
               {/* Divider */}
-              <div className="flex items-center justify-center space-x-2 my-5">
-                <span className="h-px w-16 bg-gray-100" />
-                <span className="text-gray-300 font-normal">hoặc</span>
-                <span className="h-px w-16 bg-gray-100" />
+              <div className="flex items-center gap-3 my-1">
+                <span className="h-px flex-1 bg-white/10" />
+                <span className="text-white/30 text-xs">hoặc</span>
+                <span className="h-px flex-1 bg-white/10" />
               </div>
 
-              {/* Social login buttons */}
-              <div className="flex justify-center gap-5 w-full">
+              {/* Social buttons */}
+              <div className="grid grid-cols-2 gap-3">
                 {/* Google */}
                 <button
                   type="button"
-                  className="w-full flex items-center justify-center mb-6 md:mb-0 border border-gray-300 hover:border-gray-900 hover:bg-gray-900 hover:text-white text-sm text-gray-500 p-3 rounded-lg tracking-wide font-medium cursor-pointer transition ease-in duration-500"
+                  className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-white/70 hover:text-white text-sm transition-all duration-200"
                 >
-                  <svg className="w-4 mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z" />
                     <path fill="#34A853" d="M16.04 18.013c-1.09.703-2.474 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.067A11.965 11.965 0 0 0 12 24c2.933 0 5.735-1.043 7.834-3l-3.793-2.987Z" />
                     <path fill="#4A90E2" d="M19.834 21c2.195-2.048 3.62-5.096 3.62-9 0-.71-.109-1.473-.272-2.182H12v4.637h6.436c-.317 1.559-1.17 2.766-2.395 3.558L19.834 21Z" />
@@ -180,9 +223,9 @@ export default function Login() {
                 {/* Facebook */}
                 <button
                   type="button"
-                  className="w-full flex items-center justify-center mb-6 md:mb-0 border border-gray-300 hover:border-gray-900 hover:bg-gray-900 hover:text-white text-sm text-gray-500 p-3 rounded-lg tracking-wide font-medium cursor-pointer transition ease-in duration-500"
+                  className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 text-white/70 hover:text-white text-sm transition-all duration-200"
                 >
-                  <svg className="w-4 mr-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <path d="M50 2.5c-58.892 1.725-64.898 84.363-7.46 95h14.92c57.451-10.647 51.419-93.281-7.46-95z" fill="#1877f2" />
                     <path d="M57.46 64.104h11.125l2.117-13.814H57.46v-8.965c0-3.779 1.85-7.463 7.781-7.463h6.021V22.101c-12.894-2.323-28.385-1.616-28.722 17.66V50.29H30.417v13.814H42.54V97.5h14.92V64.104z" fill="#f1f1f1" />
                   </svg>
@@ -191,24 +234,13 @@ export default function Login() {
               </div>
             </form>
 
-            <div className="mt-7 text-center text-gray-400 text-xs">
+            {/* Footer note */}
+            <p className="mt-6 text-center text-white/25 text-xs">
               Dữ liệu được tính toán hoàn toàn cục bộ. Không lưu thông tin cá nhân.
-            </div>
+            </p>
           </div>
-          </CardTransition>
         </div>
-      </div>
-      <svg
-        className="absolute bottom-0 left-0"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 1440 320"
-      >
-        <path
-          fill="#fff"
-          fillOpacity="1"
-          d="M0,0L40,42.7C80,85,160,171,240,197.3C320,224,400,192,480,154.7C560,117,640,75,720,74.7C800,75,880,117,960,154.7C1040,192,1120,224,1200,213.3C1280,203,1360,149,1400,122.7L1440,96L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"
-        />
-      </svg>
-    </>
+      </main>
+    </div>
   )
 }
