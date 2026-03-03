@@ -32,6 +32,9 @@ export const authApi = {
 
   resetPassword: (email, code, new_password) =>
     api.post('/api/auth/reset-password', { email, code, new_password }),
+
+  googleLogin: (access_token) =>
+    api.post('/api/auth/google', { access_token }),
 }
 
 export const calculationApi = {
