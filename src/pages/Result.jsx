@@ -57,6 +57,86 @@ function TimeBar({ timeForSelf, timeForSystem, totalHours }) {
   )
 }
 
+// ─── Benchmark Card ────────────────────────────────────────────────────────
+function BenchmarkCard({ W, L }) {
+  const gap = L > 0 ? ((W - L) / L) * 100 : 0
+
+  const tiers = [
+    {
+      key: 'low',
+      icon: '🟢',
+      label: "m' < 50%",
+      desc: 'Khoảng cách giữa giá trị tạo ra và lương không quá lớn.',
+      color: 'text-emerald-700',
+      bg: 'bg-emerald-50',
+      border: 'border-emerald-200',
+      active: gap < 50,
+    },
+    {
+      key: 'mid',
+      icon: '🟡',
+      label: "50% – 120%",
+      desc: 'Khoảng cách ở mức phổ biến.',
+      color: 'text-amber-700',
+      bg: 'bg-amber-50',
+      border: 'border-amber-200',
+      active: gap >= 50 && gap <= 120,
+    },
+    {
+      key: 'high',
+      icon: '🔴',
+      label: "> 120%",
+      desc: 'Khoảng cách cao, bạn có thể xem xét lại vị thế khi thương lượng.',
+      color: 'text-rose-700',
+      bg: 'bg-rose-50',
+      border: 'border-rose-200',
+      active: gap > 120,
+    },
+  ]
+
+  const current = tiers.find((t) => t.active) || tiers[2]
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-gray-400">
+          m' = (Giá trị tạo ra − Thu nhập) / Thu nhập
+        </p>
+        <span className={`text-sm font-bold px-2.5 py-0.5 rounded-full border ${current.bg} ${current.border} ${current.color}`}>
+          {gap.toFixed(0)}%
+        </span>
+      </div>
+      <div className="space-y-2">
+        {tiers.map((t) => (
+          <div
+            key={t.key}
+            className={`flex items-start gap-3 rounded-xl px-4 py-3 border transition-all duration-200
+              ${t.active
+                ? `${t.bg} ${t.border} shadow-sm`
+                : 'bg-gray-50 border-gray-100 opacity-50'
+              }`}
+          >
+            <span className="text-base leading-none mt-0.5 flex-shrink-0">{t.icon}</span>
+            <div>
+              <span className={`text-sm font-semibold ${t.active ? t.color : 'text-gray-500'}`}>
+                {t.label}
+              </span>
+              <p className={`text-xs mt-0.5 leading-relaxed ${t.active ? t.color : 'text-gray-400'}`}>
+                {t.desc}
+              </p>
+            </div>
+            {t.active && (
+              <span className="ml-auto flex-shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full bg-white/70 border border-current opacity-70 self-start">
+                Bạn đang ở đây
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ─── Retention Slider ──────────────────────────────────────────────────────
 function RetentionSlider({ currentRetention, minRetention, W, L, role }) {
   const minPct = Math.ceil(minRetention * 100)
@@ -332,21 +412,15 @@ export default function Result() {
             </div>
           </motion.div>
 
-          {/* Retention slider */}
+          {/* Benchmark card */}
           <motion.div custom={3} variants={fadeUp} initial="hidden" animate="show"
             className="rounded-3xl overflow-hidden shadow-2xl" style={{ background: '#ffffff' }}>
             <div className="h-1 w-full" style={{ background: 'linear-gradient(90deg, #a855f7, #ec4899)' }} />
             <div className="p-6 sm:p-7 space-y-4">
               <h3 className="text-sm font-semibold text-gray-700">
-                Nếu muốn giữ lại nhiều hơn — cần thay đổi bao nhiêu?
+                Khoảng cách giữa giá trị tạo ra và thu nhập đang ở mức nào?
               </h3>
-              <RetentionSlider
-                currentRetention={retention_rate}
-                minRetention={min_retention}
-                W={W}
-                L={L}
-                role={role}
-              />
+              <BenchmarkCard W={W} L={L} />
             </div>
           </motion.div>
 
