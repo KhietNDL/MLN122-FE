@@ -115,7 +115,7 @@ export default function App() {
           </h1>
 
           <p className="text-white/50" style={{ fontSize: '1rem', lineHeight: 1.7 }}>
-            Đăng nhập để xem bạn đang giữ lại bao nhiêu giá trị từ công việc của mình.
+            Đăng nhập để xem bạn đang làm nhiều hơn mức lương bao nhiêu lần.
           </p>
 
           {/* Decorative info card */}

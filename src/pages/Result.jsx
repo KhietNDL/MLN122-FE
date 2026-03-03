@@ -335,7 +335,7 @@ export default function Result() {
               <h2 className="text-2xl font-bold text-gray-900 leading-snug">
                 Bạn đang tạo ra giá trị{' '}
                 <span className="relative inline-block" style={{ color: '#7c3aed' }}>
-                  gấp {contribution_multiple.toFixed(1)} lần
+                  gấp {(contribution_multiple * 100).toFixed(0)}%
                   <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full opacity-30" style={{ background: '#7c3aed' }} />
                 </span>{' '}
                 {role === 'office' ? 'mức lương nhận được.' : 'thu nhập bạn giữ lại.'}
